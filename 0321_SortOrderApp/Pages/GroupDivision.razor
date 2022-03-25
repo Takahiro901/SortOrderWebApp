@@ -1,0 +1,70 @@
+﻿@page "/groupDivision"
+
+<PageTitle>グループ分け</PageTitle>
+
+
+<h2>グループ分け</h2>
+<form>
+    <div class="mb-3">
+        <label class="form-label">グループ数</label>
+        <select @bind="GroupCount" class="form-control" style="width:50px;">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+    </div>
+    <div  class="mb-3">
+        <label class="form-label">メンバー</label>
+        <textarea @bind="inputText" rows="5" class="form-control" style="width: 300px;" maxlength="50" placeholder="名前を改行区切りで入力(最大50文字)"></textarea>
+    </div>
+</form>
+
+<button @onclick="OnSetClicked" class="btn btn-primary">グループ分け</button>
+<hr />
+@for(var i =0; i < group.Count; i++)
+{
+    <label>@($"第{i+1}グループ")</label>
+    <ul>
+        @foreach(var item in group[i])
+        {
+            <li>@item</li>
+        }
+    </ul>
+}
+
+@code {
+    private string inputText = "";
+    private int GroupCount = 1;
+
+    private List<string> orderedList = new List<string>();
+    Dictionary<int, List<string>> group = new();
+
+    Random r = new Random();
+
+    private void OnSetClicked()
+    {
+        //メンバーを並べ替える
+        orderedList.Clear();
+        var nameList = inputText.Split(Environment.NewLine).ToList();
+        int n = nameList.Count;
+        for(int i =0; i < n; i++)
+        {
+            var randomNum = r.Next(0, n - i);
+            orderedList.Add(nameList[randomNum]);
+            nameList.RemoveAt(randomNum);
+        }
+
+        //グループの振り分け
+        group.Clear();
+        for (var i = 0; i < orderedList.Count; i++)
+        {
+            if(i < GroupCount)
+            {
+                group[i] = new List<string>();
+            }
+            group[i % GroupCount].Add(orderedList[i]);
+        }
+    }
+}
