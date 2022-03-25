@@ -11,7 +11,11 @@
 
 <div hidden="@(!displayResult)" style="text-align:center;" >
     <button style="width: 80px; " @onclick="OnNextClicked">@buttonText</button>
-    <div style="font-size: 50pt;">@currentName</div>    
+    <div style="font-size: 50pt;">@currentName</div> 
+    @if(0 < orderNumber)
+    {
+        <p>@($"{orderNumber} / {namesCount}")</p>
+    }
 </div>
 
 @code {
@@ -23,6 +27,7 @@
     private int orderNumber = 0;
     private string currentName = "　";
     private string buttonText = "";
+    private int namesCount;
 
     private void OnSetClicked()
     {
@@ -31,6 +36,7 @@
         var nameList = inputText.Split(Environment.NewLine).ToList();
 
         int n = nameList.Count;
+        namesCount = n;
         for(int i =0; i < n; i++)
         {
             var randomNum = r.Next(0, n - i);
@@ -46,12 +52,12 @@
         if(orderNumber < orderedList.Count)
         {
             currentName = orderedList[orderNumber];
-            if(orderNumber == 0)
+            orderNumber++;
+            if(orderNumber < orderedList.Count)
             {
                 buttonText = "次へ";
             }
-            orderNumber++;
-            if(orderNumber == orderedList.Count)
+            else
             {
                 buttonText = "終了";
             }
