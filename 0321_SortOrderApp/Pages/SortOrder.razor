@@ -1,0 +1,66 @@
+﻿@page "/sortorder2"
+
+<PageTitle>順番決めアプリ</PageTitle>
+
+<h2>順番決めアプリ（一人ずつ表示）</h2>
+
+<label style="display:block;">名前入力欄</label>
+<textarea @bind="inputText" disabled=@displayResult style="width: 300px; height: 200px;" placeholder="名前を入力してください(改行区切り)"></textarea>
+<button @onclick="OnSetClicked" disabled=@displayResult>シャッフル</button>
+<hr />
+
+<div hidden="@(!displayResult)" style="text-align:center;" >
+    <button style="width: 80px; " @onclick="OnNextClicked">@buttonText</button>
+    <div style="font-size: 50pt;">@currentName</div>    
+</div>
+
+@code {
+    private string inputText = "";
+    private bool displayResult = false;
+    private List<string> orderedList = new List<string>();
+    Random r = new Random();
+
+    private int orderNumber = 0;
+    private string currentName = "　";
+    private string buttonText = "";
+
+    private void OnSetClicked()
+    {
+        orderedList.Clear();
+
+        var nameList = inputText.Split(Environment.NewLine).ToList();
+
+        int n = nameList.Count;
+        for(int i =0; i < n; i++)
+        {
+            var randomNum = r.Next(0, n - i);
+            orderedList.Add(nameList[randomNum]);
+            nameList.RemoveAt(randomNum);
+        }
+        buttonText = "スタート";
+        displayResult = true;
+    }
+
+    private void OnNextClicked()
+    {
+        if(orderNumber < orderedList.Count)
+        {
+            currentName = orderedList[orderNumber];
+            if(orderNumber == 0)
+            {
+                buttonText = "次へ";
+            }
+            orderNumber++;
+            if(orderNumber == orderedList.Count)
+            {
+                buttonText = "終了";
+            }
+        }
+        else
+        {
+            orderNumber = 0;
+            currentName = "　";
+            displayResult = false;
+        }
+    }
+}

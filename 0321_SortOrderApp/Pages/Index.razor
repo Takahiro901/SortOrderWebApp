@@ -2,10 +2,10 @@
 
 <PageTitle>順番決めアプリ</PageTitle>
 
-<h2>順番決めアプリ</h2>
+<h2>順番決めアプリ（一括表示）</h2>
 
 <label style="display:block;">名前入力欄</label>
-<textarea @bind="inputText" style="width: 300px; height: 200px;" placeholder="名前を入力してください"></textarea>
+<textarea @bind="inputText" style="width: 300px; height: 200px;" placeholder="名前を入力してください(改行区切り)"></textarea>
 <button @onclick="OnSetClicked">シャッフル</button>
 <hr />
 
@@ -18,7 +18,6 @@
         }
     </ol>
 </div>
-
 
 @code{
     private string inputText = "";
