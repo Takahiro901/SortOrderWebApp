@@ -28,6 +28,11 @@
 
     private void OnSetClicked()
     {
+        if(inputText.Length > 50)
+        {
+            inputText = inputText.Substring(0, 50);
+        }
+
         orderedList.Clear();
 
         var nameList = inputText.Split(Environment.NewLine).ToList();

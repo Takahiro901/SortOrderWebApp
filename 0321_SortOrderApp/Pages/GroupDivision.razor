@@ -49,6 +49,15 @@
 
     private void OnSetClicked()
     {
+        if (5 < GroupCount)
+        {
+            GroupCount = 5;
+        }
+        else if(GroupCount < 1)
+        {
+            GroupCount = 1;
+        }
+
         //メンバーを並べ替える
         orderedList.Clear();
         var nameList = inputText.Split(Environment.NewLine).ToList();
