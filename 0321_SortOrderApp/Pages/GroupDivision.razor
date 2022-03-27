@@ -25,13 +25,17 @@
 <hr />
 @for(var i =0; i < group.Count; i++)
 {
-    <label>@($"第{i+1}グループ")</label>
-    <ul>
-        @foreach(var item in group[i])
-        {
-            <li>@item</li>
-        }
-    </ul>
+    <div class="card border-primary mb-3" style="width: 18rem;">
+        <div class="card-header">
+            @($"第{i+1}グループ")
+        </div>
+        <ul class="list-group list-group-flush">
+            @foreach(var item in group[i])
+            {
+                <li class="list-group-item">@item</li>
+            }
+        </ul>
+    </div>
 }
 
 @code {
