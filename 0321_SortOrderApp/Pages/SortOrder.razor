@@ -6,14 +6,22 @@
 
 <label style="display:block;">名前入力欄</label>
 <textarea @bind="inputText" disabled=@displayResult style="width: 300px; height: 200px;" maxlength="50" placeholder="改行区切りで入力(最大50文字)"></textarea>
-<button type="button" class="btn btn-primary" @onclick="OnSetClicked" disabled=@displayResult>シャッフル</button>
+<button type="button" class="btn btn-primary" @onclick="OnSetClicked" >@startButtonText</button>
 <hr />
 
-<div hidden="@(!displayResult)" style="text-align:center;" >
-    <button type="button" class="btn btn-primary" style="width: 100px; " @onclick="OnNextClicked">@buttonText</button>
-    <div style="font-size: 50pt;">@currentName</div> 
-    <p>@($"{orderNumber} / {namesCount}")</p>
-</div>
+@if (displayResult)
+{
+    <div style="text-align:center;" >
+        <div>
+            <button disabled=@(!(0 < orderNumber)) type="button" class="btn btn-primary" style="width: 100px; margin:10px; " @onclick="OnBackClicked">戻る</button>
+            <button disabled=@(!(orderNumber < namesCount-1)) type="button" class="btn btn-primary" style="width: 100px; margin:10px;" @onclick="OnNextClicked">進む</button>
+        </div>
+
+        <div style="font-size: 50pt;">@orderedList[orderNumber]</div> 
+        <p>@($"{orderNumber+1} / {namesCount}")</p>
+
+    </div>
+}
 
 @code {
     private string inputText = "";
@@ -22,53 +30,56 @@
     Random r = new Random();
 
     private int orderNumber = 0;
-    private string currentName = "　";
-    private string buttonText = "";
     private int namesCount;
+    private string startButtonText = "スタート！";
 
     private void OnSetClicked()
     {
-        if(inputText.Length > 50)
+        if (displayResult)
         {
-            inputText = inputText.Substring(0, 50);
+            displayResult = false;
+            startButtonText = "スタート！";
         }
-
-        orderedList.Clear();
-
-        var nameList = inputText.Split(Environment.NewLine).ToList();
-
-        int n = nameList.Count;
-        namesCount = n;
-        for(int i =0; i < n; i++)
+        else
         {
-            var randomNum = r.Next(0, n - i);
-            orderedList.Add(nameList[randomNum]);
-            nameList.RemoveAt(randomNum);
+            if (inputText.Length > 50)
+            {
+                inputText = inputText.Substring(0, 50);
+            }
+
+            orderedList.Clear();
+            orderNumber = 0;
+
+            var nameList = inputText.Split(Environment.NewLine).ToList();
+
+            int n = nameList.Count;
+            namesCount = n;
+            for (int i = 0; i < n; i++)
+            {
+                var randomNum = r.Next(0, n - i);
+                orderedList.Add(nameList[randomNum]);
+                nameList.RemoveAt(randomNum);
+            }
+            startButtonText = "終了";
+            displayResult = true;
         }
-        buttonText = "スタート";
-        displayResult = true;
+    }
+    
+    private void OnBackClicked()
+    {
+        if(0 < orderNumber)
+        {
+            orderNumber--;
+        }
     }
 
     private void OnNextClicked()
     {
-        if(orderNumber < orderedList.Count)
+        if(orderNumber < namesCount-1)
         {
-            currentName = orderedList[orderNumber];
             orderNumber++;
-            if(orderNumber < orderedList.Count)
-            {
-                buttonText = "次へ";
-            }
-            else
-            {
-                buttonText = "終了";
-            }
-        }
-        else
-        {
-            orderNumber = 0;
-            currentName = "　";
-            displayResult = false;
         }
     }
+
+
 }
