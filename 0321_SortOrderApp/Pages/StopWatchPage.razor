@@ -1,0 +1,55 @@
+﻿@page "/stopwatch"
+@using System.Diagnostics
+@using System.Timers
+
+<h3>ストップウォッチ</h3>
+
+<p style="font-size:60px">@ts.ToString(@"mm\:ss\:ff")</p>
+
+<button class="btn btn-primary" @onclick=ToggleStopwatch style="width:70px;">@buttonText</button>
+<button class="btn btn-secondary" @onclick=Reset style="width:70px;">Reset</button>
+
+
+@code {
+    Stopwatch sw = new();
+    System.Timers.Timer timer = new System.Timers.Timer();
+    TimeSpan ts = TimeSpan.Zero;
+    bool isMeasuring = false;
+    string buttonText = "Start";
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        timer.Interval = 10;
+        timer.Enabled = true;
+        timer.Elapsed += (s,e) =>
+        {
+            ts = sw.Elapsed;
+            StateHasChanged();
+        };
+    }
+
+    void ToggleStopwatch()
+    {
+        if (isMeasuring)
+        {
+            sw.Stop();
+            isMeasuring = false;
+            buttonText = "Start";
+        }
+        else
+        {
+            sw.Start();
+            isMeasuring = true;
+            buttonText = "Stop";
+        }
+    }
+
+    void Reset()
+    {
+        sw.Reset();
+        ts = TimeSpan.Zero;
+        isMeasuring = false;
+        buttonText = "Start";
+    }
+}
