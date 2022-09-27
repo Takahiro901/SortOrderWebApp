@@ -51,6 +51,8 @@
             orderNumber = 0;
 
             var nameList = inputText.Split(Environment.NewLine).ToList();
+            //空要素を削除
+            nameList.RemoveAll(string.IsNullOrEmpty);
 
             int n = nameList.Count;
             namesCount = n;
@@ -80,6 +82,4 @@
             orderNumber++;
         }
     }
-
-
 }
