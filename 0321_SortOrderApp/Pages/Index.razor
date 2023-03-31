@@ -24,10 +24,18 @@
     private bool result = true;
     private List<string> orderedList = new List<string>();
 
-    Random r = new Random();
-
     private void OnSetClicked()
     {
+        var nameList = inputText.Split(Environment.NewLine).ToList();
+
+        //空要素を削除
+        nameList.RemoveAll(string.IsNullOrEmpty);
+
+        if (nameList.Count == 0)
+        {
+            return;
+        }
+
         if(inputText.Length > 50)
         {
             inputText = inputText.Substring(0, 50);
@@ -35,15 +43,8 @@
 
         orderedList.Clear();
 
-        var nameList = inputText.Split(Environment.NewLine).ToList();
+        orderedList = nameList.OrderBy(i => Guid.NewGuid()).ToList();
 
-        int n = nameList.Count;
-        for(int i =0; i < n; i++)
-        {
-            var randomNum = r.Next(0, n - i);
-            orderedList.Add(nameList[randomNum]);
-            nameList.RemoveAt(randomNum);
-        }
         result = false;
     }
 }

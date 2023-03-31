@@ -27,7 +27,6 @@
     private string inputText = "";
     private bool displayResult = false;
     private List<string> orderedList = new List<string>();
-    Random r = new Random();
 
     private int orderNumber = 0;
     private int namesCount;
@@ -39,29 +38,28 @@
         {
             displayResult = false;
             startButtonText = "スタート！";
+            orderNumber = 0;
         }
         else
         {
+            var nameList = inputText.Split(Environment.NewLine).ToList();
+
+            //空要素を削除
+            nameList.RemoveAll(string.IsNullOrEmpty);
+
+            if(nameList.Count == 0)
+            {
+                return;
+            }
+
             if (inputText.Length > 50)
             {
                 inputText = inputText.Substring(0, 50);
             }
 
-            orderedList.Clear();
-            orderNumber = 0;
+            orderedList = nameList.OrderBy(i => Guid.NewGuid()).ToList();
+            namesCount = nameList.Count;
 
-            var nameList = inputText.Split(Environment.NewLine).ToList();
-            //空要素を削除
-            nameList.RemoveAll(string.IsNullOrEmpty);
-
-            int n = nameList.Count;
-            namesCount = n;
-            for (int i = 0; i < n; i++)
-            {
-                var randomNum = r.Next(0, n - i);
-                orderedList.Add(nameList[randomNum]);
-                nameList.RemoveAt(randomNum);
-            }
             startButtonText = "終了";
             displayResult = true;
         }
