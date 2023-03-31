@@ -20,6 +20,29 @@
 <button type="button" class="btn btn-primary" @onclick="OnSetClicked" >@startButtonText</button>
 <hr />
 
+<style>
+    #InputArea {
+        position: relative;
+        display: inline-block;
+        height: 200px;
+    }
+
+        #InputArea textarea {
+            width: 300px;
+            height: inherit;
+            resize: none;
+        }
+
+        #InputArea #buttonGroup {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            border-width: 1px;
+            color: black;
+        }
+</style>
+
+
 @if (displayResult)
 {
     <div style="text-align:center;" >
